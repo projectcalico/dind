@@ -1,6 +1,5 @@
-FROM alpine:3.2
-
-RUN apk add --update iptables && rm -rf /var/cache/apk/*
+FROM jeanblanchard/alpine-glibc
+RUN apk add --update iptables ip6tables && rm -rf /var/cache/apk/*
 ADD https://raw.githubusercontent.com/docker/docker/master/hack/dind /usr/local/bin/ 
 ADD https://raw.githubusercontent.com/docker-library/docker/master/1.8/dind/dockerd-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
