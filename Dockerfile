@@ -1,6 +1,6 @@
 FROM jeanblanchard/alpine-glibc
 MAINTAINER Tom Denham <tom@projectcalico.org>
-RUN apk add --update iptables ip6tables && rm -rf /var/cache/apk/*
+RUN apk add --update iptables ip6tables iproute2 curl && rm -rf /var/cache/apk/*
 ADD https://raw.githubusercontent.com/docker/docker/master/hack/dind /usr/local/bin/ 
 ADD https://raw.githubusercontent.com/docker-library/docker/master/1.8/dind/dockerd-entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/*
