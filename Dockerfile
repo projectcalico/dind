@@ -1,14 +1,15 @@
-FROM jeanblanchard/alpine-glibc
+FROM docker:dind
 MAINTAINER Tom Denham <tom@projectcalico.org>
-RUN apk add --update iptables ip6tables iproute2 curl && rm -rf /var/cache/apk/*
-ADD https://raw.githubusercontent.com/docker/docker/master/hack/dind /usr/local/bin/ 
-ADD https://raw.githubusercontent.com/docker-library/docker/master/1.8/dind/dockerd-entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/*
 
-VOLUME /var/lib/docker
-EXPOSE 2375
+# Install iptables, ip6tables, iproute2, and perform glibc install as per:
+# https://github.com/jeanblanchard/docker-alpine-glibc/blob/master/Dockerfile
+RUN apk add --update iptables ip6tables iproute2 curl && \
+  curl -o glibc.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-2.23-r1.apk" && \
+  apk add --allow-untrusted glibc.apk && \
+  curl -o glibc-bin.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-bin-2.23-r1.apk" && \
+  apk add --allow-untrusted glibc-bin.apk && \
+  /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc/usr/lib && \
+  echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+  rm -f glibc.apk glibc-bin.apk && \
+  rm -rf /var/cache/apk/*
 
-# Requires an executable docker binary to be volume mounted into the PATH
-
-ENTRYPOINT ["dockerd-entrypoint.sh"]
-CMD []
