@@ -3,7 +3,7 @@ MAINTAINER Tom Denham <tom@projectcalico.org>
 
 # Install iptables, ip6tables, iproute2, and perform glibc install as per:
 # https://github.com/jeanblanchard/docker-alpine-glibc/blob/master/Dockerfile
-RUN apk add --update iptables ip6tables iproute2 curl && \
+RUN apk add --update iptables ip6tables ipset iproute2 curl && \
   curl -o glibc.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-2.23-r1.apk" && \
   apk add --allow-untrusted glibc.apk && \
   curl -o glibc-bin.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-bin-2.23-r1.apk" && \
