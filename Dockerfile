@@ -1,4 +1,4 @@
-FROM docker:dind
+FROM docker:17.12.0-dind
 MAINTAINER Tom Denham <tom@projectcalico.org>
 
 # Install iptables, ip6tables, iproute2, and perform glibc install as per:
