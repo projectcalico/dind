@@ -1,4 +1,4 @@
-FROM ppc64le/docker:dind
+FROM ppc64le/docker:17.12.0-dind
 MAINTAINER David Wilder <wilder@ibm.com>
 
 # Install iptables, ip6tables, iproute2, and perform glibc install as per:
