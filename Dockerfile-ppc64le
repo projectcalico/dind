@@ -1,0 +1,6 @@
+FROM ppc64le/docker:17.12.0-dind
+MAINTAINER David Wilder <wilder@ibm.com>
+
+RUN apk add --update iptables ip6tables ipset iproute2 curl busybox-extras && \
+  echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+  rm -rf /var/cache/apk/*
