@@ -1,0 +1,6 @@
+FROM s390x/docker:17.12.0-dind
+MAINTAINER LoZ Open Source Ecosystem (https://www.ibm.com/developerworks/community/groups/community/lozopensource)
+
+RUN apk add --update iptables ip6tables ipset iproute2 curl busybox-extras && \
+  echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+  rm -rf /var/cache/apk/*
