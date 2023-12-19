@@ -16,7 +16,6 @@ RUN apk add --update curl && \
   apk add --force-overwrite glibc-bin.apk glibc.apk && \
   /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
   echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
-  apk del curl && \
   rm -rf /var/cache/apk/* glibc.apk glibc-bin.apk
 
 # Back-compat wrapper around the timeout command.  Earlier busybox versions
