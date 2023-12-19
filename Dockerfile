@@ -1,15 +1,20 @@
-FROM docker:17.12.0-dind
+FROM docker:18.09-dind
 MAINTAINER Tom Denham <tom@projectcalico.org>
+
+# Install our deps.
+RUN apk add --update iptables ip6tables ipset iproute2 curl busybox-extras 
 
 # Install iptables, ip6tables, iproute2, and perform glibc install as per:
 # https://github.com/jeanblanchard/docker-alpine-glibc/blob/master/Dockerfile
-RUN apk add --update iptables ip6tables ipset iproute2 curl busybox-extras && \
-  curl -o glibc.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-2.23-r1.apk" && \
-  apk add --allow-untrusted glibc.apk && \
-  curl -o glibc-bin.apk -L "https://github.com/andyshinn/alpine-pkg-glibc/releases/download/2.23-r1/glibc-bin-2.23-r1.apk" && \
-  apk add --allow-untrusted glibc-bin.apk && \
-  /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc/usr/lib && \
-  echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
-  rm -f glibc.apk glibc-bin.apk && \
-  rm -rf /var/cache/apk/*
+ENV GLIBC_VERSION 2.35-r1
 
+# Download and install glibc
+RUN apk add --update curl && \
+  curl -Lo /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub && \
+  curl -Lo glibc.apk "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-${GLIBC_VERSION}.apk" && \
+  curl -Lo glibc-bin.apk "https://github.com/sgerrand/alpine-pkg-glibc/releases/download/${GLIBC_VERSION}/glibc-bin-${GLIBC_VERSION}.apk" && \
+  apk add --force-overwrite glibc-bin.apk glibc.apk && \
+  /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
+  echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
+  apk del curl && \
+  rm -rf /var/cache/apk/* glibc.apk glibc-bin.apk
