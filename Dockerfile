@@ -18,3 +18,7 @@ RUN apk add --update curl && \
   echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf && \
   apk del curl && \
   rm -rf /var/cache/apk/* glibc.apk glibc-bin.apk
+
+# Back-compat wrapper around the timeout command.  Earlier busybox versions
+# required a -t argument so our older release brnahces still have that.
+COPY ./timeout /usr/local/bin

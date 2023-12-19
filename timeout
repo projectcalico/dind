@@ -1,0 +1,7 @@
+#!/bin/sh
+
+if [ $1 = "-t" ]; then
+  shift
+fi
+
+/usr/bin/timeout "$@"
